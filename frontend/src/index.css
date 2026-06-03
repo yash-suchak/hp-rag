@@ -1,0 +1,161 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0d0221;
+  --bg-2: #110a2e;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-hover: rgba(255, 255, 255, 0.07);
+  --border: rgba(200, 160, 255, 0.22);
+  --border-focus: rgba(212, 175, 55, 0.7);
+  --gold: #d4af37;
+  --gold-light: #f0d060;
+  --gold-dim: rgba(212, 175, 55, 0.5);
+  --amber: #ff8c00;
+  --text: #e8dcc8;
+  --text-dim: rgba(232, 220, 200, 0.55);
+  --purple-glow: #9b59b6;
+  --purple-bright: #c084fc;
+  --font-heading: 'Cinzel Decorative', serif;
+  --font-body: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* ── Wand cursor ─────────────────────────────────────────── */
+body {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cline x1='28' y1='4' x2='6' y2='28' stroke='%23c9a84c' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='28' cy='4' r='3' fill='%23ffd700' opacity='0.9'/%3E%3Ccircle cx='28' cy='4' r='5' fill='none' stroke='%23ffd700' stroke-width='1' opacity='0.5'/%3E%3Cline x1='28' y1='1' x2='28' y2='-1' stroke='%23ffd700' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='31' y1='4' x2='33' y2='4' stroke='%23ffd700' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='30.1' y1='1.9' x2='31.5' y2='0.5' stroke='%23ffd700' stroke-width='1' stroke-linecap='round'/%3E%3C/svg%3E") 28 4, crosshair;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Starfield ───────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 33% 7%,  rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 54% 25%, rgba(255,255,255,0.9) 0%, transparent 100%),
+    radial-gradient(1px 1px at 71% 11%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 88% 34%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 5% 61%,  rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 23% 74%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 47% 88%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 63% 52%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 81% 67%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 83%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 17% 43%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(2px 2px at 39% 56%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 76% 22%, rgba(212,175,55,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 58% 78%, rgba(192,132,252,0.4) 0%, transparent 100%);
+  animation: starTwinkle 8s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 7% 29%,  rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 28% 91%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 44% 14%, rgba(255,255,255,0.9) 0%, transparent 100%),
+    radial-gradient(1px 1px at 67% 38%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 83% 72%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 95% 19%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 3% 85%,  rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 52% 47%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 38% 33%, rgba(212,175,55,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 72% 58%, rgba(192,132,252,0.3) 0%, transparent 100%);
+  animation: starTwinkle 11s ease-in-out infinite alternate-reverse;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes starTwinkle {
+  0%   { opacity: 0.6; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* ── Sparks overlay ─────────────────────────────────────── */
+#sparks-root {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.spark {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: sparkFly var(--duration, 500ms) ease-out forwards;
+}
+
+@keyframes sparkFly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0.1);
+  }
+}
+
+/* ── Ink reveal animation ───────────────────────────────── */
+@keyframes inkReveal {
+  0% {
+    opacity: 0;
+    filter: brightness(4) sepia(1) hue-rotate(10deg);
+    color: #ff4400;
+    text-shadow: 0 0 10px #ff4400, 0 0 20px #ff8800;
+  }
+  30% {
+    opacity: 0.8;
+    filter: brightness(2.5) sepia(0.7);
+    color: #ffd700;
+    text-shadow: 0 0 6px #ffaa00, 0 0 12px #ff8800;
+  }
+  65% {
+    opacity: 1;
+    filter: brightness(1.2) sepia(0.2);
+    color: #f0d080;
+    text-shadow: 0 0 3px rgba(212,175,55,0.4);
+  }
+  100% {
+    opacity: 1;
+    filter: none;
+    color: var(--text);
+    text-shadow: none;
+  }
+}
+
+/* ── Loading/utility animations ─────────────────────────── */
+@keyframes spinStar {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(212,175,55,0.3), 0 0 40px rgba(212,175,55,0.1); }
+  50%       { box-shadow: 0 0 30px rgba(212,175,55,0.5), 0 0 60px rgba(212,175,55,0.2); }
+}

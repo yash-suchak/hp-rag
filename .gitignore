@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Environment
+backend/.env
+.env
+.env.*
+!.env.example
+!backend/.env.example
+
+# Data — generated / copyrighted, not committed
+data/books/
+data/chroma_db/
+data/bm25_index.pkl
+
+# Logs
+logs/
+*.log
+
+# Learnings
+learnings/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.sw?
