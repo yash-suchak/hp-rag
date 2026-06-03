@@ -21,24 +21,30 @@ Ask questions about all 7 Harry Potter books. The backend retrieves relevant pas
 ### 1. Clone & configure environment
 
 ```bash
-git clone https://github.com/aashishsuchak/hp-rag.git
+git clone https://github.com/yash-suchak/hp-rag.git
 cd hp-rag
 cp backend/.env.example backend/.env
 # Edit backend/.env and add your ANTHROPIC_API_KEY
 ```
 
-### 2. Add books
+### 2. Download the books
 
-Place the 7 Harry Potter PDFs in `data/books/` named as:
+1. Go to https://ia902903.us.archive.org/12/items/FantasyFictionebookcollection/
+2. Download the 7 Harry Potter PDFs
+3. Create the `data/books/` directory and place the files there, renamed exactly as follows:
+
 ```
-1 - Harry Potter and the Sorcerer's Stone.pdf
-2 - Harry Potter and the Chamber of Secrets.pdf
-3 - Harry Potter and the Prisoner of Azkaban.pdf
-4 - Harry Potter and the Goblet of Fire.pdf
-5 - Harry Potter and the Order of the Phoenix.pdf
-6 - Harry Potter and the Half-Blood Prince.pdf
-7 - Harry Potter and the Deathly Hallows.pdf
+data/books/
+├── 1 - Harry Potter and the Sorcerer's Stone.pdf
+├── 2 - Harry Potter and the Chamber of Secrets.pdf
+├── 3 - Harry Potter and the Prisoner of Azkaban.pdf
+├── 4 - Harry Potter and the Goblet of Fire.pdf
+├── 5 - Harry Potter and the Order of the Phoenix.pdf
+├── 6 - Harry Potter and the Half-Blood Prince.pdf
+└── 7 - Harry Potter and the Deathly Hallows.pdf
 ```
+
+> The filenames must match exactly — the ingest script uses these names to tag sources i.e. sr.no _ - _ Book name .pdf
 
 ### 3. Ingest books into the vector store
 
