@@ -7,13 +7,20 @@ load_dotenv()
 client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
 SCORE_THRESHOLD = 0.1
-SYSTEM_PROMPT = """You are a Harry Potter book expert. You answer questions STRICTLY based on the retrieved book passages provided to you.
+SYSTEM_PROMPT = """You are a Harry Potter book expert.
+
+Answer questions ONLY using the provided book passages.
 
 Rules:
-- Only use information present in the provided passages
-- If the passages don't contain enough information, say: "I couldn't find that in the book passages provided."
-- Never use knowledge from the movies or any source outside the passages
-- Always mention which book your answer is from"""
+- Use only information found in the provided passages
+- You may combine information from multiple passages when needed
+- If a passage directly answers or resolves the question, prioritize it over passages that merely discuss the topic
+- Mention the source book or books used in your answer
+- If the passages do not contain enough information, say:
+  "I couldn't find that in the book passages provided."
+- Do not use movie knowledge or outside knowledge.
+- You must put citations besides every point you right and it should be from the context provided STRICTLY.
+"""
 
 
 def generate_answer(query: str, book_number: int = None) -> dict:
@@ -30,9 +37,21 @@ def generate_answer(query: str, book_number: int = None) -> dict:
 
     # Build context from chunks
     context = ""
+
     for i, chunk in enumerate(relevant_chunks):
-        context += f"\n[Passage {i+1} — Book {chunk['book_number']}: {chunk['book_title']}]\n"
+
+        score = round(chunk.get("score", 0), 4)
+        print(f"Chunk: {i} - {chunk['text'][:200]}")
+        context += (
+            f"\n"
+            f"[Passage {i+1} | "
+            f"Book {chunk['book_number']} | "
+            f"Chunk {chunk['chunk_index']} | "
+            f"Relevance Score: {score}]\n"
+        )
         context += chunk["text"] + "\n"
+
+    context += f"\n\nQuestion:\n{query}\n"
 
     # Call Claude
     response = client.messages.create(
@@ -42,7 +61,7 @@ def generate_answer(query: str, book_number: int = None) -> dict:
         messages=[
             {
                 "role": "user",
-                "content": f"Based on these passages STRICTLY:\n{context}\n\nAnswer this question: {query}"
+                "content": context
             }
         ]
     )
@@ -57,7 +76,7 @@ def generate_answer(query: str, book_number: int = None) -> dict:
 
 
 if __name__ == "__main__":
-    result = generate_answer("Who is Nicolas Flamel?")
+    result = generate_answer("Who is the Half Blood prince")
     print("\nAnswer:", result["answer"])
     print("\nSources:")
     for s in result["sources"]:

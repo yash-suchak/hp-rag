@@ -6,7 +6,7 @@ import chromadb
 
 # ── Config ────────────────────────────────────────────────
 BOOKS_DIR = "../data/books"
-CHROMA_DIR = "../data/chroma_db"
+CHROMA_DIR = "data/chroma_db"
 CHUNK_SIZE = 1500
 CHUNK_OVERLAP = 150
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"

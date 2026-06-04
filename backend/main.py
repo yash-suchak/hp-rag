@@ -40,26 +40,6 @@ def get_remaining_queries(ip: str) -> int:
     recent = [t for t in rate_store[ip] if t > window]
     return max(0, RATE_LIMIT - len(recent))
 
-# ── Topic guardrail ───────────────────────────────────────
-_anthropic = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
-
-def is_harry_potter_related(question: str) -> bool:
-    try:
-        response = _anthropic.messages.create(
-            model="claude-haiku-4-5",
-            max_tokens=10,
-            system="""You are a topic classifier. 
-The user is using a Harry Potter book Q&A system.
-Determine if the question is related to Harry Potter, its characters, spells, events, or world.
-Reply with only YES or NO.""",
-            messages=[{"role": "user", "content": question}]
-        )
-        result = response.content[0].text.strip().upper()
-        return result == "YES"
-    except Exception as e:
-        logger.error(f"Guardrail check failed: {e}")
-        return True  # fail open so a guardrail bug doesn't break the app
-
 
 # ── Request / Response models ─────────────────────────────
 class QueryRequest(BaseModel):
@@ -97,15 +77,7 @@ async def ask(request: Request, body: QueryRequest):
             status_code=429,
             detail="You have used all 5 daily queries. Come back tomorrow."
         )
-
-    # Guardrail
-    if not is_harry_potter_related(question):
-        logger.warning(f"[{ip}] Off-topic question blocked: '{question}'")
-        raise HTTPException(
-            status_code=400,
-            detail="This tool only answers questions about the Harry Potter books. Please ask something related to the series."
-        )
-
+        
     # Generate
     try:
         result = generate_answer(question, body.book_number)

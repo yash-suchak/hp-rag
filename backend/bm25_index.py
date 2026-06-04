@@ -3,8 +3,8 @@ import pickle
 import os
 from rank_bm25 import BM25Okapi
 
-CHROMA_DIR = "../data/chroma_db"
-BM25_INDEX_PATH = "../data/bm25_index.pkl"
+CHROMA_DIR = "data/chroma_db"
+BM25_INDEX_PATH = "data/bm25_index.pkl"
 
 
 def build_bm25_index():
