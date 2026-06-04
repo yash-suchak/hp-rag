@@ -4,19 +4,20 @@
 }
 
 .crest {
-  font-size: 2rem;
+  width: 46px;
+  height: 53px;
   color: var(--gold);
-  animation: float 4s ease-in-out infinite;
   display: block;
-  margin-bottom: 0.5rem;
-  text-shadow: 0 0 20px var(--gold), 0 0 40px rgba(212,175,55,0.4);
+  margin: 0 auto 0.9rem;
+  filter: drop-shadow(0 0 6px var(--gold)) drop-shadow(0 0 18px rgba(212,175,55,0.4));
+  animation: float 4s ease-in-out infinite;
 }
 
 .title {
   font-family: var(--font-heading);
   font-size: clamp(2rem, 6vw, 4rem);
   font-weight: 900;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.1em;
   line-height: 1.15;
   background: linear-gradient(
     135deg,

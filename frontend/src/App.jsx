@@ -5,6 +5,9 @@ import { Header } from './components/Header';
 import { SearchForm } from './components/SearchForm';
 import { AnswerBox } from './components/AnswerBox';
 import { Sources } from './components/Sources';
+import { LumosOverlay } from './components/LumosOverlay';
+import { FloatingCandles } from './components/FloatingCandles';
+import { Starfield } from './components/Starfield';
 
 const API_URL = 'http://localhost:8000';
 
@@ -13,6 +16,9 @@ export default function App() {
   const [sources, setSources] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [lumosComplete, setLumosComplete] = useState(
+    () => !!sessionStorage.getItem('lumos_cast')
+  );
 
   useSparks();
 
@@ -48,7 +54,13 @@ export default function App() {
   }
 
   return (
-    <div className="app">
+    <>
+      {!lumosComplete && (
+        <LumosOverlay onComplete={() => setLumosComplete(true)} />
+      )}
+      <Starfield />
+      <FloatingCandles />
+      <div className="app">
       <Header />
 
       <main className="main">
@@ -69,5 +81,6 @@ export default function App() {
         <p>✦ &nbsp;Powered by Hogwarts archives &amp; Claude&nbsp;&nbsp;✦</p>
       </footer>
     </div>
+    </>
   );
 }
