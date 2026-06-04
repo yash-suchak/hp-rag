@@ -1,0 +1,11 @@
+anthropic
+fastapi
+uvicorn[standard]
+python-dotenv
+pydantic
+chromadb
+sentence-transformers
+langchain-text-splitters
+rank-bm25
+pymupdf
+numpy
