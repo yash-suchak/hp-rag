@@ -9,6 +9,7 @@ env/
 
 # Environment
 backend/.env
+backend/debug_*
 .env
 .env.*
 !.env.example
@@ -16,6 +17,7 @@ backend/.env
 
 # Data — generated / copyrighted, not committed
 data/books/
+debug_*
 
 # Logs
 logs/
