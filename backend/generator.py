@@ -15,11 +15,11 @@ Rules:
 - Use only information found in the provided passages
 - You may combine information from multiple passages when needed
 - If a passage directly answers or resolves the question, prioritize it over passages that merely discuss the topic
-- Mention the source book or books used in your answer
 - If the passages do not contain enough information, say:
   "I couldn't find that in the book passages provided."
 - Do not use movie knowledge or outside knowledge.
-- After every fact or claim, add a superscript-style book reference in square brackets, e.g. [3] for Book 3. Use only the book numbers from the provided passages. Do not mention chunk numbers or relevance scores.
+- When referring to a book in your prose, always use its full title (e.g. "Order of the Phoenix"), never "Book 5" or a number alone.
+- After every fact or claim, add an inline citation using ONLY the format [N] where N is a book number from the "Valid citations" list at the top of the context. Never cite a book number that is not in that list. Never write [Book N] or [Book N, Chunk X].
 """
 
 
@@ -36,7 +36,8 @@ def generate_answer(query: str, book_number: int = None) -> dict:
         }
 
     # Build context from chunks
-    context = ""
+    valid_refs = ", ".join(f"[{n}]" for n in sorted(set(c["book_number"] for c in relevant_chunks)))
+    context = f"Valid citations for this response: {valid_refs}\n\n"
 
     for i, chunk in enumerate(relevant_chunks):
 
