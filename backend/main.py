@@ -16,7 +16,7 @@ app = FastAPI(title="HP RAG API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -53,7 +53,7 @@ class QueryResponse(BaseModel):
 
 
 # ── Routes ────────────────────────────────────────────────
-@app.get("/")
+@app.get("/health")
 def health():
     return {"status": "ok"}
 

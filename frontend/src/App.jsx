@@ -9,7 +9,7 @@ import { LumosOverlay } from './components/LumosOverlay';
 import { FloatingCandles } from './components/FloatingCandles';
 import { Starfield } from './components/Starfield';
 
-const API_URL = 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
 
 export default function App() {
   const [answer, setAnswer] = useState('');
