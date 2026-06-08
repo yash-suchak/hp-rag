@@ -19,7 +19,7 @@ Rules:
 - If the passages do not contain enough information, say:
   "I couldn't find that in the book passages provided."
 - Do not use movie knowledge or outside knowledge.
-- You must put citations besides every point you right and it should be from the context provided STRICTLY.
+- After every fact or claim, add a superscript-style book reference in square brackets, e.g. [3] for Book 3. Use only the book numbers from the provided passages. Do not mention chunk numbers or relevance scores.
 """
 
 
@@ -66,12 +66,19 @@ def generate_answer(query: str, book_number: int = None) -> dict:
         ]
     )
 
+    seen_books = {}
+    for c in relevant_chunks:
+        bn = c["book_number"]
+        if bn not in seen_books or c["score"] > seen_books[bn]["score"]:
+            seen_books[bn] = {
+                "book_number": bn,
+                "book": c["book_title"].replace(".pdf", "").strip(),
+                "score": round(c["score"], 4),
+            }
+
     return {
         "answer": response.content[0].text,
-        "sources": [
-            {"book": c["book_title"], "score": c["score"]}
-            for c in relevant_chunks
-        ]
+        "sources": list(seen_books.values())
     }
 
 
