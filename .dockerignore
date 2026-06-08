@@ -1,0 +1,10 @@
+frontend/
+data/books/
+logs/
+learnings/
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+backend/.env
+.git/
+.DS_Store

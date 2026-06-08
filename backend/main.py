@@ -16,7 +16,7 @@ app = FastAPI(title="HP RAG API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["https://hogwarts-oracle.vercel.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -53,7 +53,7 @@ class QueryResponse(BaseModel):
 
 
 # ── Routes ────────────────────────────────────────────────
-@app.get("/")
+@app.get("/health")
 def health():
     return {"status": "ok"}
 
@@ -75,7 +75,7 @@ async def ask(request: Request, body: QueryRequest):
         logger.warning(f"[{ip}] Rate limit exceeded")
         raise HTTPException(
             status_code=429,
-            detail="You have used all 5 daily queries. Come back tomorrow."
+            detail=f"Accio patience! You've had {RATE_LIMIT} Butterbeers today and Madam Pomfrey says that's quite enough. Return after your morning classes tomorrow."
         )
         
     # Generate

@@ -1,3 +1,13 @@
+---
+title: HP RAG
+emoji: 🧙
+colorFrom: purple
+colorTo: yellow
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # HP RAG — Harry Potter Retrieval-Augmented Generation
 
 Ask questions about all 7 Harry Potter books. The backend retrieves relevant passages from a ChromaDB vector store and sends them to Claude for grounded answers — all wrapped in a wizardry-themed UI.
