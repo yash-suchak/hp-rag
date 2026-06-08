@@ -8,7 +8,7 @@ export function Header() {
         <circle cx="50" cy="78" r="24" stroke="currentColor" strokeWidth="3" />
         <line x1="50" y1="5" x2="50" y2="110" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
       </svg>
-      <h1 className={styles.title}>Platform 9¾</h1>
+      <h1 className={styles.title}>Hogwarts Oracle 🪄</h1>
       <p className={styles.subtitle}>
         Seek knowledge from the seven sacred tomes
       </p>
