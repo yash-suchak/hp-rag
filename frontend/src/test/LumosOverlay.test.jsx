@@ -32,21 +32,21 @@ describe('LumosOverlay', () => {
   it('does not show hint text immediately after mount', () => {
     vi.useFakeTimers();
     render(<LumosOverlay onComplete={onComplete} />);
-    expect(screen.queryByText(/wave your wand/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/cast lumos/i)).not.toBeInTheDocument();
   });
 
   it('hint text appears after 1500ms', () => {
     vi.useFakeTimers();
     render(<LumosOverlay onComplete={onComplete} />);
     act(() => vi.advanceTimersByTime(1500));
-    expect(screen.getByText(/wave your wand/i)).toBeInTheDocument();
+    expect(screen.getByText(/cast lumos/i)).toBeInTheDocument();
   });
 
   it('hint text does NOT appear before 1500ms', () => {
     vi.useFakeTimers();
     render(<LumosOverlay onComplete={onComplete} />);
     act(() => vi.advanceTimersByTime(1499));
-    expect(screen.queryByText(/wave your wand/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/cast lumos/i)).not.toBeInTheDocument();
   });
 
   it('useLumos is called with the cast handler on mount', () => {
@@ -100,10 +100,21 @@ describe('LumosOverlay', () => {
     vi.useFakeTimers();
     render(<LumosOverlay onComplete={onComplete} />);
     act(() => vi.advanceTimersByTime(1500));
-    expect(screen.getByText(/wave your wand/i)).toBeInTheDocument();
+    expect(screen.getByText(/cast lumos/i)).toBeInTheDocument();
     const castHandler = useLumos.mock.calls[0][0];
     act(() => castHandler({ x: 200, y: 300 }));
-    expect(screen.queryByText(/wave your wand/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/cast lumos/i)).not.toBeInTheDocument();
+  });
+
+  it('hint text shows non-touch variant when isTouch() returns false', () => {
+    vi.useFakeTimers();
+    // jsdom sets window.ontouchstart (no value, configurable) — delete it so isTouch() returns false
+    delete window.ontouchstart;
+    render(<LumosOverlay onComplete={onComplete} />);
+    act(() => vi.advanceTimersByTime(1500));
+    expect(screen.getByText(/wave your wand/i)).toBeInTheDocument();
+    // Restore: re-define the property as jsdom had it (no value, configurable, non-enumerable)
+    Object.defineProperty(window, 'ontouchstart', { configurable: true, enumerable: false });
   });
 
   it('overlay gets revealing class after 2200ms of cast', () => {

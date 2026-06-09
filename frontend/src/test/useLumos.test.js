@@ -17,6 +17,14 @@ function dispatchPoints(points) {
   });
 }
 
+function dispatchTouchPoints(points) {
+  points.forEach(({ x, y }) => {
+    const e = new Event('touchmove');
+    e.touches = [{ clientX: x, clientY: y }];
+    window.dispatchEvent(e);
+  });
+}
+
 describe('useLumos', () => {
   let onCast;
 
@@ -31,8 +39,7 @@ describe('useLumos', () => {
   it('attaches mousemove event listener on mount', () => {
     const spy = vi.spyOn(window, 'addEventListener');
     const { unmount } = renderHook(() => useLumos(onCast));
-    const calls = spy.mock.calls.filter(([e]) => e === 'mousemove');
-    expect(calls.length).toBeGreaterThan(0);
+    expect(spy.mock.calls.filter(([e]) => e === 'mousemove').length).toBeGreaterThan(0);
     unmount();
   });
 
@@ -40,8 +47,29 @@ describe('useLumos', () => {
     const spy = vi.spyOn(window, 'removeEventListener');
     const { unmount } = renderHook(() => useLumos(onCast));
     unmount();
-    const calls = spy.mock.calls.filter(([e]) => e === 'mousemove');
-    expect(calls.length).toBeGreaterThan(0);
+    expect(spy.mock.calls.filter(([e]) => e === 'mousemove').length).toBeGreaterThan(0);
+  });
+
+  it('attaches touchmove event listener on mount', () => {
+    const spy = vi.spyOn(window, 'addEventListener');
+    const { unmount } = renderHook(() => useLumos(onCast));
+    expect(spy.mock.calls.filter(([e]) => e === 'touchmove').length).toBeGreaterThan(0);
+    unmount();
+  });
+
+  it('removes touchmove listener on unmount', () => {
+    const spy = vi.spyOn(window, 'removeEventListener');
+    const { unmount } = renderHook(() => useLumos(onCast));
+    unmount();
+    expect(spy.mock.calls.filter(([e]) => e === 'touchmove').length).toBeGreaterThan(0);
+  });
+
+  it('DOES call onCast with circular touch gesture', () => {
+    const { unmount } = renderHook(() => useLumos(onCast));
+    act(() => dispatchTouchPoints(makeCircularPoints(200, 200, 80, 80)));
+    expect(onCast).toHaveBeenCalledTimes(1);
+    expect(onCast).toHaveBeenCalledWith(expect.objectContaining({ x: expect.any(Number), y: expect.any(Number) }));
+    unmount();
   });
 
   it('does NOT call onCast for fewer than MIN_POINTS (50) events', () => {
@@ -133,6 +161,17 @@ describe('useLumos', () => {
         return { x: 300 + r * Math.cos(theta), y: 300 + r * Math.sin(theta) };
       });
       dispatchPoints(points);
+    });
+    expect(onCast).not.toHaveBeenCalled();
+    unmount();
+  });
+
+  it('does not call onCast when touchmove fires with no touches', () => {
+    const { unmount } = renderHook(() => useLumos(onCast));
+    act(() => {
+      const e = new Event('touchmove');
+      e.touches = [];
+      window.dispatchEvent(e);
     });
     expect(onCast).not.toHaveBeenCalled();
     unmount();

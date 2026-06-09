@@ -2,6 +2,8 @@ import { useState, useCallback, useEffect } from 'react';
 import { useLumos } from '../hooks/useLumos';
 import styles from './LumosOverlay.module.css';
 
+const isTouch = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
 export function LumosOverlay({ onComplete }) {
   const [phase, setPhase] = useState('covering'); // covering | casting | revealing
   const [bloom, setBloom] = useState(null);
@@ -27,7 +29,11 @@ export function LumosOverlay({ onComplete }) {
   return (
     <div className={`${styles.overlay} ${phase === 'revealing' ? styles.revealing : ''}`}>
       {phase === 'covering' && showHint && (
-        <p className={styles.hint}>✦&nbsp; Wave your wand in a circle to cast Lumos &nbsp;✦</p>
+        <p className={styles.hint}>
+          {isTouch()
+            ? '✦  Draw a circle with your finger to cast Lumos  ✦'
+            : '✦  Wave your wand in a circle to cast Lumos  ✦'}
+        </p>
       )}
       {bloom && (
         <div
