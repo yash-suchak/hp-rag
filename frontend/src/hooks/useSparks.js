@@ -1,13 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const COLORS = ['#ffd700', '#ffaa00', '#ff8800', '#ff6600', '#fff0a0', '#c084fc'];
 
 export function useSparks() {
+  const lastTouchTime = useRef(0);
+
   useEffect(() => {
     const root = document.getElementById('sparks-root');
     if (!root) return;
 
-    function spawnSparks(e) {
+    function spawnSparks(x, y) {
       const count = 12 + Math.floor(Math.random() * 6);
 
       for (let i = 0; i < count; i++) {
@@ -23,8 +25,8 @@ export function useSparks() {
         const color = COLORS[Math.floor(Math.random() * COLORS.length)];
 
         spark.style.cssText = `
-          left: ${e.clientX - size / 2}px;
-          top: ${e.clientY - size / 2}px;
+          left: ${x - size / 2}px;
+          top: ${y - size / 2}px;
           width: ${size}px;
           height: ${size}px;
           background: ${color};
@@ -39,7 +41,24 @@ export function useSparks() {
       }
     }
 
-    window.addEventListener('click', spawnSparks);
-    return () => window.removeEventListener('click', spawnSparks);
+    function onTouch(e) {
+      const t = e.touches[0];
+      if (!t) return;
+      lastTouchTime.current = Date.now();
+      spawnSparks(t.clientX, t.clientY);
+    }
+
+    function onClick(e) {
+      // Suppress the synthetic click that fires ~300ms after a touch
+      if (Date.now() - lastTouchTime.current < 500) return;
+      spawnSparks(e.clientX, e.clientY);
+    }
+
+    window.addEventListener('touchstart', onTouch, { passive: true });
+    window.addEventListener('click', onClick);
+    return () => {
+      window.removeEventListener('touchstart', onTouch);
+      window.removeEventListener('click', onClick);
+    };
   }, []);
 }

@@ -17,6 +17,13 @@
   gap: 1.5rem;
 }
 
+@media (max-width: 480px) {
+  .main {
+    padding: 0 1rem 3rem;
+    gap: 1.25rem;
+  }
+}
+
 .error {
   font-family: var(--font-body);
   font-style: italic;

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SearchForm } from '../components/SearchForm';
 
@@ -86,5 +86,11 @@ describe('SearchForm', () => {
   it('non-loading state shows Accio Answer button text', () => {
     render(<SearchForm onSubmit={onSubmit} isLoading={false} />);
     expect(screen.getByRole('button')).toHaveTextContent(/accio answer/i);
+  });
+
+  it('handleSubmit isLoading guard: fires form submit directly while loading does not call onSubmit', () => {
+    const { container } = render(<SearchForm onSubmit={onSubmit} isLoading={true} />);
+    fireEvent.submit(container.querySelector('form'));
+    expect(onSubmit).not.toHaveBeenCalled();
   });
 });

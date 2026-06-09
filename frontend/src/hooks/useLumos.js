@@ -36,10 +36,10 @@ export function useLumos(onCast) {
   const last = useRef(null);
 
   useEffect(() => {
-    function onMove(e) {
+    function processPoint(x, y) {
       if (fired.current) return;
 
-      const p = { x: e.clientX, y: e.clientY };
+      const p = { x, y };
       if (last.current && Math.hypot(p.x - last.current.x, p.y - last.current.y) < 5) return;
       last.current = p;
 
@@ -48,11 +48,24 @@ export function useLumos(onCast) {
 
       if (isCircle(buf.current)) {
         fired.current = true;
-        onCast({ x: e.clientX, y: e.clientY });
+        onCast({ x, y });
       }
     }
 
-    window.addEventListener('mousemove', onMove);
-    return () => window.removeEventListener('mousemove', onMove);
+    function onMouseMove(e) {
+      processPoint(e.clientX, e.clientY);
+    }
+
+    function onTouchMove(e) {
+      const t = e.touches[0];
+      if (t) processPoint(t.clientX, t.clientY);
+    }
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('touchmove', onTouchMove);
+    };
   }, [onCast]);
 }
